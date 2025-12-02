@@ -41,7 +41,7 @@ jwt = JWTManager(app)
 # CORS Configuration
 # In production, FRONTEND_URL should be set to the deployed frontend URL (e.g., https://healix.vercel.app)
 frontend_url = os.environ.get('FRONTEND_URL', "http://localhost:5173")
-CORS(app, supports_credentials=True, origins=[frontend_url, "http://localhost:5173", "http://127.0.0.1:5173"])
+CORS(app, supports_credentials=True, origins=[frontend_url, "https://healixv2.vercel.app", "http://localhost:5173", "http://127.0.0.1:5173"])
 
 # Database Model
 class User(db.Model):
