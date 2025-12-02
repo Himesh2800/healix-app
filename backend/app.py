@@ -12,7 +12,7 @@ import os
 from datetime import timedelta, datetime
 from remedies_data import remedies_data
 from dotenv import load_dotenv
-from skin_model_loader import SkinDiseaseModel
+# from skin_model_loader import SkinDiseaseModel
 from werkzeug.utils import secure_filename
 
 load_dotenv()
@@ -416,34 +416,23 @@ def predict_skin():
         return jsonify({'error': 'No selected file'}), 400
 
     if file:
-        # Save file to temp location
-        filename = secure_filename(file.filename)
-        upload_folder = os.path.join(app.instance_path, 'uploads')
-        os.makedirs(upload_folder, exist_ok=True)
-        filepath = os.path.join(upload_folder, filename)
-        file.save(filepath)
+        # Mock prediction for now since TensorFlow is removed
+        top_result = {
+            'name': 'Eczema (Mock Result)',
+            'probability': 0.95,
+            'description': 'This is a mock result because the ML model is temporarily disabled.'
+        }
         
-        # Run prediction
-        results = skin_model.predict(filepath)
-        
-        # Clean up (optional, or keep for history)
-        # os.remove(filepath) 
-        
-        if isinstance(results, dict) and "error" in results:
-             return jsonify(results), 500
-             
-        # Use the top prediction
-        top_result = results[0]
-        
-        # Save to SkinAnalysisLog
+        # Save to SkinAnalysisLog (Mock)
         try:
             current_user_id = get_jwt_identity()
             if current_user_id:
+                # We don't save the file to disk in mock mode to save space
                 new_log = SkinAnalysisLog(
                     user_id=int(current_user_id),
                     condition_name=top_result['name'],
                     probability=top_result['probability'],
-                    image_path=filepath # Storing local path for now
+                    image_path="mock_image.jpg" 
                 )
                 db.session.add(new_log)
                 db.session.commit()
