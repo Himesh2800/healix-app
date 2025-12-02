@@ -11,6 +11,5 @@ Pillow
 gunicorn
 requests
 python-dotenv
-tensorflow-cpu
 numpy
 
